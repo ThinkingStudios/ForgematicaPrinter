@@ -7,11 +7,14 @@ val minecraft_version: String by project
 val mappings_version: String by project
 val yarn_patch: String by project
 val neoforge_version: String by project
-val malilib_version: String by project
-val litematica_version: String by project
+val mafglib_version: String by project
+val forgematica_version: String by project
 
 val archives_base_name: String by project
 val mod_version: String by project
+
+base.archivesName = archives_base_name
+version = "${mod_version}+mc${minecraft_version}"
 
 java {
     withSourcesJar()
@@ -42,33 +45,33 @@ dependencies {
 
     neoForge("net.neoforged:neoforge:${neoforge_version}")
 
-    modImplementation("maven.modrinth:mafglib:${malilib_version}")
-    modImplementation("maven.modrinth:forgematica:${litematica_version}")
+    modImplementation("maven.modrinth:mafglib:${mafglib_version}")
+    modImplementation("maven.modrinth:forgematica:${forgematica_version}")
 
     modLocalRuntime("org.sinytra.forgified-fabric-api:fabric-api-base:0.4.42+d1308ded19") { isTransitive = false }
     modLocalRuntime("org.sinytra.forgified-fabric-api:fabric-networking-api-v1:4.3.2+cfe47bf204") { isTransitive = false }
 }
 
 tasks.withType<ProcessResources> {
-    inputs.property("version", mod_version)
+    inputs.property("version", version)
 
     filesMatching("META-INF/neoforge.mods.toml") {
-        expand(mapOf("version" to mod_version))
+        expand(mapOf("version" to version))
     }
 }
 
-tasks.register("copyJar") {
-    // Specify that this task runs after the 'build' task
-    dependsOn("build")
-
-    // Specify the task's action
-    doLast {
-        val destination = file("build/${archives_base_name}-${minecraft_version}-${mod_version}.jar")
-        file("build/libs/litematica-printer.jar").copyTo(destination, true)
-        println("Copied output to ${destination.absolutePath}")
-    }
-}
-
-tasks.build {
-    finalizedBy("copyJar")
-}
+//tasks.register("copyJar") {
+//    // Specify that this task runs after the 'build' task
+//    dependsOn("build")
+//
+//    // Specify the task's action
+//    doLast {
+//        val destination = file("build/${archives_base_name}-${minecraft_version}-${mod_version}.jar")
+//        file("build/libs/litematica-printer.jar").copyTo(destination, true)
+//        println("Copied output to ${destination.absolutePath}")
+//    }
+//}
+//
+//tasks.build {
+//    finalizedBy("copyJar")
+//}
