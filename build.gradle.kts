@@ -1,17 +1,14 @@
 plugins {
-    id("fabric-loom").version("1.8-SNAPSHOT")
+    id("dev.architectury.loom").version("1.9-SNAPSHOT")
     id("maven-publish")
 }
 
 val minecraft_version: String by project
 val mappings_version: String by project
-val fabric_loader_version: String by project
-val fabric_api_version: String by project
+val yarn_patch: String by project
+val neoforge_version: String by project
 val malilib_version: String by project
-//val litematica_projectid: String by project
-//val litematica_fileid: String by project
 val litematica_version: String by project
-val mod_menu_version: String by project
 
 val archives_base_name: String by project
 val mod_version: String by project
@@ -30,30 +27,32 @@ repositories {
     //maven("https://www.cursemaven.com")
     maven("https://maven.terraformersmc.com/releases/")
     maven("https://jitpack.io")
+    maven("https://maven.neoforged.net/releases")
+    maven("https://api.modrinth.com/maven")
+    maven("https://dl.cloudsmith.io/public/thinkingstudio/forgifiedfabricapi/maven/")
 }
 
 dependencies {
     minecraft("com.mojang:minecraft:${minecraft_version}")
-    mappings("net.fabricmc:yarn:${mappings_version}:v2")
+    mappings(loom.layered {
+        mappings("net.fabricmc:yarn:${mappings_version}:v2")
+        mappings("dev.architectury:yarn-mappings-patch-neoforge:${yarn_patch}")
+    })
     implementation("com.google.code.findbugs:jsr305:3.0.2")
 
-    modImplementation("net.fabricmc:fabric-loader:${fabric_loader_version}")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:${fabric_api_version}")
-    //modImplementation("fi.dy.masa.malilib:malilib-fabric-${malilib_version}")
-    //modImplementation("curse.maven:litematica-${litematica_projectid}:${litematica_fileid}")
+    neoForge("net.neoforged:neoforge:${neoforge_version}")
 
-    // Sakura's Jitpack
-    modImplementation("com.github.sakura-ryoko:malilib:${malilib_version}")
-    modImplementation("com.github.sakura-ryoko:litematica:${litematica_version}")
+    modImplementation("maven.modrinth:mafglib:${malilib_version}")
+    modImplementation("maven.modrinth:forgematica:${litematica_version}")
 
-    // For Mod Menu display
-    modCompileOnly("com.terraformersmc:modmenu:${mod_menu_version}")
+    modLocalRuntime("org.sinytra.forgified-fabric-api:fabric-api-base:0.4.42+d1308ded19") { isTransitive = false }
+    modLocalRuntime("org.sinytra.forgified-fabric-api:fabric-networking-api-v1:4.3.2+cfe47bf204") { isTransitive = false }
 }
 
 tasks.withType<ProcessResources> {
     inputs.property("version", mod_version)
 
-    filesMatching("fabric.mod.json") {
+    filesMatching("META-INF/neoforge.mods.toml") {
         expand(mapOf("version" to mod_version))
     }
 }

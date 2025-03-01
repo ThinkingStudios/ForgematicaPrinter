@@ -1,5 +1,6 @@
 package me.aleksilassila.litematica.printer.actions;
 
+import fi.dy.masa.litematica.util.InventoryUtils;
 import me.aleksilassila.litematica.printer.implementation.PrinterPlacementContext;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -23,7 +24,7 @@ public class PrepareAction extends Action {
         Direction lookDirection = context.lookDirection;
 
         if (lookDirection != null && lookDirection.getAxis().isHorizontal()) {
-            this.yaw = lookDirection.asRotation();
+            this.yaw = lookDirection.getPositiveHorizontalDegrees();
         } else {
             this.modifyYaw = false;
         }
@@ -56,14 +57,15 @@ public class PrepareAction extends Action {
 
             // This thing is straight from MinecraftClient#doItemPick()
             if (player.getAbilities().creativeMode) {
-                inventory.addPickBlock(itemStack);
+                this.addPickBlock(inventory, itemStack);
                 client.interactionManager.clickCreativeStack(player.getStackInHand(Hand.MAIN_HAND),
                         36 + inventory.selectedSlot);
             } else if (slot != -1) {
                 if (PlayerInventory.isValidHotbarIndex(slot)) {
                     inventory.selectedSlot = slot;
                 } else {
-                    client.interactionManager.pickFromInventory(slot);
+                    //client.interactionManager.pickFromInventory(slot);
+                    InventoryUtils.setPickedItemToHand(slot, itemStack, client);
                 }
             }
         }
@@ -75,15 +77,38 @@ public class PrepareAction extends Action {
             PlayerMoveC2SPacket packet = new PlayerMoveC2SPacket.Full(player.getX(), player.getY(), player.getZ(), yaw,
                     pitch, player.isOnGround(), player.horizontalCollision);
 
-            player.networkHandler.sendPacket(packet);
+            player.networkHandler.send(packet);
         }
 
         if (context.shouldSneak) {
             player.input.playerInput = new PlayerInput(player.input.playerInput.forward(), player.input.playerInput.backward(), player.input.playerInput.left(), player.input.playerInput.right(), player.input.playerInput.jump(), true, player.input.playerInput.sprint());
-            player.networkHandler.sendPacket(new ClientCommandC2SPacket(player, ClientCommandC2SPacket.Mode.PRESS_SHIFT_KEY));
+            player.networkHandler.send(new ClientCommandC2SPacket(player, ClientCommandC2SPacket.Mode.PRESS_SHIFT_KEY));
         } else {
             player.input.playerInput = new PlayerInput(player.input.playerInput.forward(), player.input.playerInput.backward(), player.input.playerInput.left(), player.input.playerInput.right(), player.input.playerInput.jump(), false, player.input.playerInput.sprint());
-            player.networkHandler.sendPacket(new ClientCommandC2SPacket(player, ClientCommandC2SPacket.Mode.RELEASE_SHIFT_KEY));
+            player.networkHandler.send(new ClientCommandC2SPacket(player, ClientCommandC2SPacket.Mode.RELEASE_SHIFT_KEY));
+        }
+    }
+
+    private void addPickBlock(PlayerInventory inv, ItemStack stack) {
+        int slot = inv.getSlotWithStack(stack);
+
+        if (slot >= 0 && slot <= 9) {
+            inv.selectedSlot = slot;
+        } else {
+            if (slot == -1) {
+                inv.selectedSlot = inv.getSwappableHotbarSlot();
+
+                if (!inv.main.get(inv.selectedSlot).isEmpty()) {
+                    int empty = inv.getEmptySlot();
+
+                    if (empty != -1) {
+                        inv.main.set(empty, inv.main.get(inv.selectedSlot));
+                    }
+                }
+                inv.main.set(inv.selectedSlot, stack);
+            } else {
+                inv.swapSlotWithHotbar(slot);
+            }
         }
     }
 

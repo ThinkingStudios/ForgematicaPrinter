@@ -1,0 +1,49 @@
+modLoader = "javafml"
+loaderVersion = "[1,)"
+license = "AGPLv3"
+
+[[mods]]
+modId = "forgematica_printer"
+version = "${version}"
+displayName = "Forgematica Printer"
+displayURL="https://github.com/ThinkingStudios/Litematica-Forge" #optional
+logoFile="icon.png" #optional
+credits="aleksilassila" #optional
+authors="TexTrue, ThinkingStudio" #optional
+description = '''
+LitematicaPrinter unofficial (Neo)Forge port.
+'''
+
+[[mixins]]
+config = "litematica-printer.mixins.json"
+
+[[mixins]]
+config = "litematica-printer-implementation.mixins.json"
+
+[[dependencies.forgematica_printer]]
+modId = "neoforge"
+type = "required"
+versionRange = "[21.3,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.forgematica_printer]]
+modId = "minecraft"
+type = "required"
+versionRange = "[1.21.3,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.forgematica_printer]]
+modId = "mafglib"
+type = "required"
+versionRange = "[*,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.forgematica_printer]]
+modId = "forgematica"
+type = "required"
+versionRange = "[*,)"
+ordering = "NONE"
+side = "BOTH"

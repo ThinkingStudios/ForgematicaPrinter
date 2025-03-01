@@ -1,5 +1,6 @@
 package me.aleksilassila.litematica.printer.guides.placement;
 
+import fi.dy.masa.litematica.util.ItemUtils;
 import me.aleksilassila.litematica.printer.SchematicBlockState;
 import me.aleksilassila.litematica.printer.actions.Action;
 import me.aleksilassila.litematica.printer.actions.PrepareAction;
@@ -35,7 +36,7 @@ abstract public class PlacementGuide extends Guide {
     }
 
     protected ItemStack getBlockItem(BlockState state) {
-        return state.getBlock().getPickStack(this.state.world, this.state.blockPos, state);
+        return ItemUtils.getItemForBlock(this.state.world, this.state.blockPos, state, true);
     }
 
     protected Optional<Block> getRequiredItemAsBlock(ClientPlayerEntity player) {
