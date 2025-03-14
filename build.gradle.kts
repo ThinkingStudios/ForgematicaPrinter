@@ -32,7 +32,12 @@ repositories {
     maven("https://jitpack.io")
     maven("https://maven.neoforged.net/releases")
     maven("https://api.modrinth.com/maven")
-    maven("https://dl.cloudsmith.io/public/thinkingstudio/forgifiedfabricapi/maven/")
+    maven {
+        url = uri("https://maven2.bai.lol")
+        content {
+            includeGroup("lol.bai")
+        }
+    }
 }
 
 dependencies {
@@ -48,8 +53,7 @@ dependencies {
     modImplementation("maven.modrinth:mafglib:${mafglib_version}")
     modImplementation("maven.modrinth:forgematica:${forgematica_version}")
 
-    modLocalRuntime("org.sinytra.forgified-fabric-api:fabric-api-base:0.4.42+d1308ded19") { isTransitive = false }
-    modLocalRuntime("org.sinytra.forgified-fabric-api:fabric-networking-api-v1:4.3.2+cfe47bf204") { isTransitive = false }
+    modLocalRuntime("lol.bai:badpackets:neo-0.7.3")
 }
 
 tasks.withType<ProcessResources> {
