@@ -67,7 +67,7 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
                     signBlockEntity.getText(front).getMessage(1, false).getString(),
                     signBlockEntity.getText(front).getMessage(2, false).getString(),
                     signBlockEntity.getText(front).getMessage(3, false).getString());
-            this.networkHandler.send(packet);
+            this.networkHandler.sendPacket(packet);
             ci.cancel();
         });
     }

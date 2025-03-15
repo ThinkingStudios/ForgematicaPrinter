@@ -19,8 +19,8 @@ version = "${mod_version}+mc${minecraft_version}"
 java {
     withSourcesJar()
 
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 repositories {
@@ -42,10 +42,7 @@ repositories {
 
 dependencies {
     minecraft("com.mojang:minecraft:${minecraft_version}")
-    mappings(loom.layered {
-        mappings("net.fabricmc:yarn:${mappings_version}:v2")
-        mappings("dev.architectury:yarn-mappings-patch-neoforge:${yarn_patch}")
-    })
+    mappings("net.fabricmc:yarn:${mappings_version}:v2")
     implementation("com.google.code.findbugs:jsr305:3.0.2")
 
     neoForge("net.neoforged:neoforge:${neoforge_version}")
@@ -53,13 +50,13 @@ dependencies {
     modImplementation("maven.modrinth:mafglib:${mafglib_version}")
     modImplementation("maven.modrinth:forgematica:${forgematica_version}")
 
-    modLocalRuntime("lol.bai:badpackets:neo-0.7.3")
+    modImplementation("lol.bai:badpackets:neo-0.6.1")
 }
 
 tasks.withType<ProcessResources> {
     inputs.property("version", version)
 
-    filesMatching("META-INF/neoforge.mods.toml") {
+    filesMatching("META-INF/mods.toml") {
         expand(mapOf("version" to version))
     }
 }

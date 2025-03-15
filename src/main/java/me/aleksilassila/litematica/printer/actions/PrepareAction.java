@@ -76,15 +76,15 @@ public class PrepareAction extends Action {
             PlayerMoveC2SPacket packet = new PlayerMoveC2SPacket.Full(player.getX(), player.getY(), player.getZ(), yaw,
                     pitch, player.isOnGround());
 
-            player.networkHandler.send(packet);
+            player.networkHandler.sendPacket(packet);
         }
 
         if (context.shouldSneak) {
             player.input.sneaking = true;
-            player.networkHandler.send(new ClientCommandC2SPacket(player, ClientCommandC2SPacket.Mode.PRESS_SHIFT_KEY));
+            player.networkHandler.sendPacket(new ClientCommandC2SPacket(player, ClientCommandC2SPacket.Mode.PRESS_SHIFT_KEY));
         } else {
             player.input.sneaking = false;
-            player.networkHandler.send(new ClientCommandC2SPacket(player, ClientCommandC2SPacket.Mode.RELEASE_SHIFT_KEY));
+            player.networkHandler.sendPacket(new ClientCommandC2SPacket(player, ClientCommandC2SPacket.Mode.RELEASE_SHIFT_KEY));
         }
     }
 
