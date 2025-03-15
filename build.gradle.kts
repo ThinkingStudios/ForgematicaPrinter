@@ -5,8 +5,7 @@ plugins {
 
 val minecraft_version: String by project
 val mappings_version: String by project
-val yarn_patch: String by project
-val neoforge_version: String by project
+val forge_version: String by project
 val mafglib_version: String by project
 val forgematica_version: String by project
 
@@ -15,6 +14,12 @@ val mod_version: String by project
 
 base.archivesName = archives_base_name
 version = "${mod_version}+mc${minecraft_version}"
+
+loom {
+    forge {
+        mixinConfigs("litematica-printer.mixins.json", "litematica-printer-implementation.mixins.json")
+    }
+}
 
 java {
     withSourcesJar()
@@ -45,12 +50,10 @@ dependencies {
     mappings("net.fabricmc:yarn:${mappings_version}:v2")
     implementation("com.google.code.findbugs:jsr305:3.0.2")
 
-    neoForge("net.neoforged:neoforge:${neoforge_version}")
+    forge("net.minecraftforge:forge:${forge_version}")
 
     modImplementation("maven.modrinth:mafglib:${mafglib_version}")
     modImplementation("maven.modrinth:forgematica:${forgematica_version}")
-
-    modImplementation("lol.bai:badpackets:neo-0.6.1")
 }
 
 tasks.withType<ProcessResources> {

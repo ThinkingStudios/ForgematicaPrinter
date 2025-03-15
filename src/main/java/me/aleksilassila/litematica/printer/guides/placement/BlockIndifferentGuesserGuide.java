@@ -14,7 +14,7 @@ public class BlockIndifferentGuesserGuide extends GuesserGuide {
         Block resultBlock = resultState.getBlock();
 
         if (targetBlock instanceof BambooBlock) {
-            return resultBlock instanceof BambooBlock || resultBlock instanceof BambooShootBlock;
+            return resultBlock instanceof BambooBlock || resultBlock instanceof BambooSaplingBlock;
         }
 
         if (targetBlock instanceof BigDripleafStemBlock) {

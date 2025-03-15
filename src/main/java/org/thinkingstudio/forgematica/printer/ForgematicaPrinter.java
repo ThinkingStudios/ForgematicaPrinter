@@ -2,16 +2,19 @@ package org.thinkingstudio.forgematica.printer;
 
 import me.aleksilassila.litematica.printer.LitematicaMixinMod;
 import me.aleksilassila.litematica.printer.PrinterReference;
-import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.loading.FMLLoader;
-import org.thinkingstudio.mafglib.util.NeoUtils;
+import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.loading.FMLLoader;
+import org.thinkingstudio.mafglib.util.ForgeUtils;
+
 
 @Mod(value = PrinterReference.MOD_ID)
 public class ForgematicaPrinter {
-    public ForgematicaPrinter(ModContainer modContainer) {
+    public ForgematicaPrinter() {
         if (FMLLoader.getDist().isClient()) {
-            NeoUtils.getInstance().getClientModIgnoredServerOnly(modContainer);
+            var modContainer = ModLoadingContext.get().getActiveContainer();
+
+            ForgeUtils.getInstance().getClientModIgnoredServerOnly(modContainer);
             LitematicaMixinMod.onInitialize();
         }
     }

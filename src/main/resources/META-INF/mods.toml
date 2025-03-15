@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[1,)"
+loaderVersion = "[46,)"
 license = "AGPLv3"
 
 [[mods]]
@@ -14,36 +14,30 @@ description = '''
 LitematicaPrinter unofficial (Neo)Forge port.
 '''
 
-[[mixins]]
-config = "litematica-printer.mixins.json"
-
-[[mixins]]
-config = "litematica-printer-implementation.mixins.json"
-
 [[dependencies.forgematica_printer]]
-modId = "neoforge"
-type = "required"
-versionRange = "[20.3,)"
+modId = "forge"
+mandatory = true
+versionRange = "[46,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.forgematica_printer]]
 modId = "minecraft"
-type = "required"
-versionRange = "[1.20.3,)"
+mandatory = true
+versionRange = "[1.20,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.forgematica_printer]]
 modId = "mafglib"
-type = "required"
+mandatory = true
 versionRange = "[*,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.forgematica_printer]]
 modId = "forgematica"
-type = "required"
+mandatory = true
 versionRange = "[*,)"
 ordering = "NONE"
 side = "BOTH"
