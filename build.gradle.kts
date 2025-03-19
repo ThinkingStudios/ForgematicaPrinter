@@ -1,5 +1,6 @@
 plugins {
     id("dev.architectury.loom").version("1.9-SNAPSHOT")
+    id("com.hypherionmc.modutils.modpublisher").version("2.+")
     id("maven-publish")
 }
 
@@ -61,18 +62,18 @@ tasks.withType<ProcessResources> {
     }
 }
 
-//tasks.register("copyJar") {
-//    // Specify that this task runs after the 'build' task
-//    dependsOn("build")
-//
-//    // Specify the task's action
-//    doLast {
-//        val destination = file("build/${archives_base_name}-${minecraft_version}-${mod_version}.jar")
-//        file("build/libs/litematica-printer.jar").copyTo(destination, true)
-//        println("Copied output to ${destination.absolutePath}")
-//    }
-//}
-//
-//tasks.build {
-//    finalizedBy("copyJar")
-//}
+publisher {
+    apiKeys.modrinth(System.getenv("MODRINTH_TOKEN"))
+    apiKeys.curseforge(System.getenv("CURSEFORGE_TOKEN"))
+
+    curseID.set("$project.curseforge_id")
+    modrinthID.set("$project.modrinth_id")
+    versionType.set("release")
+    changelog.set(file("CHANGELOG.md"))
+    displayName.set("$project.version")
+    gameVersions.set(listOf("1.20", "1.20.1"))
+    loaders.set(listOf(loom.platform.get().id()))
+    projectVersion.set("$project.version")
+    artifact.set(tasks.remapJar)
+    addAdditionalFile(tasks.remapSourcesJar)
+}
