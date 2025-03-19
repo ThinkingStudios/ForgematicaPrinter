@@ -71,7 +71,7 @@ publisher {
     versionType.set("release")
     changelog.set(file("CHANGELOG.md"))
     displayName.set("$project.version")
-    gameVersions.set(listOf("1.20", "1.20.1"))
+    gameVersions.set(listOf("1.20.4"))
     loaders.set(listOf(loom.platform.get().id()))
     projectVersion.set("$project.version")
     artifact.set(tasks.remapJar)
