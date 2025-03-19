@@ -14,6 +14,9 @@ val forgematica_version: String by project
 val archives_base_name: String by project
 val mod_version: String by project
 
+val curseforge_id: String by project
+val modrinth_id: String by project
+
 base.archivesName = archives_base_name
 version = "${mod_version}+mc${minecraft_version}"
 
@@ -65,14 +68,14 @@ publisher {
     apiKeys.modrinth(System.getenv("MODRINTH_TOKEN"))
     apiKeys.curseforge(System.getenv("CURSEFORGE_TOKEN"))
 
-    curseID.set("$project.curseforge_id")
-    modrinthID.set("$project.modrinth_id")
-    versionType.set("release")
+    curseID.set("$curseforge_id")
+    modrinthID.set("$modrinth_id")
+    versionType.set("alpha")
     changelog.set(file("CHANGELOG.md"))
-    displayName.set("$project.version")
+    displayName.set("${mod_version}+mc${minecraft_version}")
     gameVersions.set(listOf("1.21.4"))
     loaders.set(listOf(loom.platform.get().id()))
-    projectVersion.set("$project.version")
+    projectVersion.set("${mod_version}+mc${minecraft_version}")
     artifact.set(tasks.remapJar)
     addAdditionalFile(tasks.remapSourcesJar)
 }
