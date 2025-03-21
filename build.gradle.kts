@@ -70,7 +70,7 @@ publisher {
 
     curseID.set("$curseforge_id")
     modrinthID.set("$modrinth_id")
-    versionType.set("release")
+    versionType.set("alpha")
     changelog.set(file("CHANGELOG.md"))
     displayName.set("${mod_version}+mc${minecraft_version}")
     gameVersions.set(listOf("1.21.3"))
