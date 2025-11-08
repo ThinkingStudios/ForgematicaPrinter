@@ -67,7 +67,7 @@ public class GuesserGuide extends GeneralPlacementGuide {
                 boolean requiresShift = getRequiresExplicitShift() || isInteractive(neighborState.getBlock());
 
                 if (!canBeClicked(state.world, neighborPos) || // Handle unclickable grass for example
-                        neighborState.isReplaceable())
+                        neighborState.getMaterial().isReplaceable())
                     continue;
 
                 Vec3d hitVec = Vec3d.ofCenter(state.blockPos)

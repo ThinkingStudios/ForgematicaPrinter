@@ -140,7 +140,7 @@ abstract public class PlacementGuide extends Guide {
 //                return true;
 //            }
             // TODO --> if this ever gets removed
-            return blockState.blocksMovement();
+            return blockState.getMaterial().blocksMovement();
         }
 
         return true;

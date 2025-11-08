@@ -15,8 +15,8 @@ public class InteractActionImpl extends InteractAction {
     @Override
     protected void interact(MinecraftClient client, ClientPlayerEntity player, Hand hand, BlockHitResult hitResult) {
         if (client.interactionManager != null) {
-            client.interactionManager.interactBlock(player, hand, hitResult);
-            client.interactionManager.interactItem(player, hand);
+            client.interactionManager.interactBlock(player, player.clientWorld, hand, hitResult);
+            client.interactionManager.interactItem(player, player.clientWorld, hand);
         }
     }
 }

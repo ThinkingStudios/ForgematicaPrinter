@@ -58,18 +58,18 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
     }
 
     @Inject(method = "openEditSignScreen", at = @At("HEAD"), cancellable = true)
-    public void openEditSignScreen(SignBlockEntity sign, boolean front, CallbackInfo ci) {
-        getTargetSignEntity(sign).ifPresent(signBlockEntity ->
-        {
-            UpdateSignC2SPacket packet = new UpdateSignC2SPacket(sign.getPos(),
-                    front,
-                    signBlockEntity.getText(front).getMessage(0, false).getString(),
-                    signBlockEntity.getText(front).getMessage(1, false).getString(),
-                    signBlockEntity.getText(front).getMessage(2, false).getString(),
-                    signBlockEntity.getText(front).getMessage(3, false).getString());
-            this.networkHandler.sendPacket(packet);
-            ci.cancel();
-        });
+    public void openEditSignScreen(SignBlockEntity sign, CallbackInfo ci) {
+    getTargetSignEntity(sign).ifPresent(signBlockEntity -> {
+        UpdateSignC2SPacket packet = new UpdateSignC2SPacket(
+        sign.getPos(),
+        signBlockEntity.getTextOnRow(0, false).getString(),
+        signBlockEntity.getTextOnRow(1, false).getString(),
+        signBlockEntity.getTextOnRow(2, false).getString(),
+        signBlockEntity.getTextOnRow(3, false).getString()
+        );
+        this.networkHandler.sendPacket(packet);
+        ci.cancel();
+    });
     }
 
     @Unique
