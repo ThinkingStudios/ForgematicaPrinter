@@ -5,10 +5,12 @@ import fi.dy.masa.litematica.util.RayTraceUtils;
 import fi.dy.masa.litematica.world.SchematicWorldHandler;
 import fi.dy.masa.litematica.world.WorldSchematic;
 import me.aleksilassila.litematica.printer.actions.Action;
+import me.aleksilassila.litematica.printer.actions.InteractAction;
 import me.aleksilassila.litematica.printer.config.Configs;
 import me.aleksilassila.litematica.printer.config.Hotkeys;
 import me.aleksilassila.litematica.printer.guides.Guide;
 import me.aleksilassila.litematica.printer.guides.Guides;
+import me.aleksilassila.litematica.printer.implementation.PrinterPlacementContext;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.player.PlayerAbilities;
@@ -63,6 +65,10 @@ public class Printer {
                 continue;
             }
 
+            if (!Configs.INTERACT_BLOCKS.getBooleanValue() && state.targetState.getBlock().equals(state.currentState.getBlock())) {
+                continue;
+            }
+
             Guide[] guides = interactionGuides.getInteractionGuides(state);
 
             BlockHitResult result = RayTraceUtils.traceToSchematicWorld(player, 10, true, true);
@@ -70,7 +76,7 @@ public class Printer {
 
             for (Guide guide : guides) {
                 // Add INTERACT_BLOCKS pull by DarkReaper231
-                if (guide.canExecute(player) && Configs.INTERACT_BLOCKS.getBooleanValue()) {
+                if (guide.canExecute(player)) {
                     printDebug("Executing {} for {}", guide, state);
                     List<Action> actions = guide.execute(player);
                     actionHandler.addActions(actions.toArray(Action[]::new));

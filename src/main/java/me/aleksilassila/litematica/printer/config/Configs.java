@@ -14,12 +14,14 @@ public class Configs {
 
     // Configs settings
     public static final ConfigInteger PRINTING_INTERVAL = new ConfigInteger("printingInterval", 12, 1, 40, "Printing interval. Lower values mean faster printing speed.\nIf the printer creates \"ghost blocks\" or blocks are facing the wrong way, raise this value.");
-    public static final ConfigDouble PRINTING_RANGE = new ConfigDouble("printingRange", 5, 2.5, 5, "Printing block place range\nLower values are recommended for servers.");
+    public static final ConfigDouble PRINTING_RANGE = new ConfigDouble("printingRange", 5, 2.5, 50, "Printing block place range\nLower values are recommended for servers.");
     public static final ConfigBoolean PRINT_MODE = new ConfigBoolean("printingMode", false, "Autobuild / print loaded selection.\nBe aware that some servers and anticheat plugins do not allow printing.");
     public static final ConfigBoolean PRINT_DEBUG = new ConfigBoolean("printingDebug", false, "Enables Debug logging for printing.");
     public static final ConfigBoolean REPLACE_FLUIDS_SOURCE_BLOCKS = new ConfigBoolean("replaceFluidSourceBlocks", true, "Whether or not fluid source blocks should be replaced by the printer.");
     public static final ConfigBoolean STRIP_LOGS = new ConfigBoolean("stripLogs", true, "Whether or not the printer should use normal logs if stripped\\nversions are not available and then strip them with an axe.");
     public static final ConfigBoolean INTERACT_BLOCKS = new ConfigBoolean("interactBlocks", true, "Whether or not the printer should set block states.");
+    public static final ConfigBoolean PRINT_IN_AIR = new ConfigBoolean("printInAir", false, "Whether or not the printer can place blocks in mid-air without support.");
+    public static final ConfigInteger BLOCKS_PER_INTERVAL = new ConfigInteger("blocksPerInterval", 1, 1, 512, "Number of blocks to place per printing interval.");
 
     public static ImmutableList<IConfigBase> getConfigList() {
         List<IConfigBase> list = new java.util.ArrayList<>(fi.dy.masa.litematica.config.Configs.Generic.OPTIONS);
@@ -30,6 +32,8 @@ public class Configs {
         list.add(REPLACE_FLUIDS_SOURCE_BLOCKS);
         list.add(STRIP_LOGS);
         list.add(INTERACT_BLOCKS);
+        list.add(PRINT_IN_AIR);
+        list.add(BLOCKS_PER_INTERVAL);
 
         return ImmutableList.copyOf(list);
     }

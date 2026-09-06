@@ -15,7 +15,11 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.World;
@@ -74,20 +78,28 @@ abstract public class PlacementGuide extends Guide {
             return false;
 
         ItemPlacementContext ctx = getPlacementContext(player);
-        if (ctx == null || !ctx.canPlace()) return false;
-//        if (!state.currentState.getMaterial().isReplaceable()) return false;
+        if (ctx == null || !ctx.canPlace()) {
+            if (Configs.PRINT_IN_AIR.getBooleanValue()) {
+                Vec3d hitVec = Vec3d.ofCenter(state.blockPos);
+                BlockHitResult fakeHit = new BlockHitResult(hitVec, Direction.DOWN, state.blockPos, false);
+                ctx = new ItemPlacementContext(player, Hand.MAIN_HAND, getRequiredItem(player).orElse(ItemStack.EMPTY), fakeHit);
+            } else {
+                return false;
+            }
+        }
+
         if (!Configs.REPLACE_FLUIDS_SOURCE_BLOCKS.getBooleanValue()
                 && getProperty(state.currentState, FluidBlock.LEVEL).orElse(1) == 0)
             return false;
 
         BlockState resultState = getRequiredItemAsBlock(player)
-                .orElse(targetState.getBlock())
-                .getPlacementState(ctx);
+            .orElse(targetState.getBlock())
+            .getPlacementState(ctx);
 
         if (resultState != null) {
-            if (!resultState.canPlaceAt(state.world, state.blockPos))
-                return false;
-            return !(currentState.getBlock() instanceof FluidBlock) || canPlaceInWater(resultState);
+            if (!Configs.PRINT_IN_AIR.getBooleanValue() && !resultState.canPlaceAt(state.world, state.blockPos))
+            return false;
+        return !(currentState.getBlock() instanceof FluidBlock) || canPlaceInWater(resultState);
         } else {
             return false;
         }
@@ -97,8 +109,15 @@ abstract public class PlacementGuide extends Guide {
     public @Nonnull List<Action> execute(ClientPlayerEntity player) {
         List<Action> actions = new ArrayList<>();
         PrinterPlacementContext ctx = getPlacementContext(player);
-
-        if (ctx == null) return actions;
+        if (ctx == null || !ctx.canPlace()) {
+            if (Configs.PRINT_IN_AIR.getBooleanValue()) {
+                Vec3d hitVec = Vec3d.ofCenter(state.blockPos);
+                BlockHitResult fakeHit = new BlockHitResult(hitVec, Direction.DOWN, state.blockPos, false);
+                ctx = new PrinterPlacementContext(player, fakeHit, getRequiredItem(player).orElse(ItemStack.EMPTY), getRequiredItemStackSlot(player));
+            } else {
+                return actions;
+            }
+        }
         actions.add(new PrepareAction(ctx));
         actions.add(new InteractActionImpl(ctx));
         if (ctx.shouldSneak) actions.add(new ReleaseShiftAction());
