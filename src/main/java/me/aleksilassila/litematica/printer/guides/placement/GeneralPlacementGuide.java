@@ -68,7 +68,7 @@ public class GeneralPlacementGuide extends PlacementGuide {
                 }
 
                 if (canBeClicked(neighborState.world, neighborState.blockPos) && // Handle unclickable grass for example
-                        !neighborState.currentState.isReplaceable())
+                        !neighborState.currentState.getMaterial().isReplaceable())
                     validSides.add(side);
             }
         }
@@ -79,7 +79,7 @@ public class GeneralPlacementGuide extends PlacementGuide {
             }
         }
 
-        return validSides.isEmpty() ? Optional.empty() : Optional.of(validSides.getFirst());
+        return validSides.isEmpty() ? Optional.empty() : Optional.of(validSides.get(0));
     }
 
     protected boolean getUseShift(SchematicBlockState state) {

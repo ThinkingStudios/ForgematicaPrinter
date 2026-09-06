@@ -30,14 +30,16 @@ public class ActionHandler {
         if (tick % tickRate != 0) {
             return;
         }
+        int actionsPerInterval = Configs.BLOCKS_PER_INTERVAL.getIntegerValue();
+        for (int i = 0; i < actionsPerInterval; i++) {
+            Action nextAction = actionQueue.poll();
 
-        Action nextAction = actionQueue.poll();
-
-        if (nextAction != null) {
-            Printer.printDebug("Sending action {}", nextAction);
-            nextAction.send(client, player);
-        } else {
-            lookAction = null;
+            if (nextAction != null) {
+                Printer.printDebug("Sending action {}", nextAction);
+                nextAction.send(client, player);
+            } else {
+                lookAction = null;
+            }
         }
     }
 

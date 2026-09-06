@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[46,)"
+loaderVersion = "[40,)"
 license = "AGPLv3"
 
 [[mods]]
@@ -17,14 +17,14 @@ LitematicaPrinter unofficial (Neo)Forge port.
 [[dependencies.forgematica_printer]]
 modId = "forge"
 mandatory = true
-versionRange = "[46,)"
+versionRange = "[40,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.forgematica_printer]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.20,)"
+versionRange = "[1.18.2,)"
 ordering = "NONE"
 side = "BOTH"
 
