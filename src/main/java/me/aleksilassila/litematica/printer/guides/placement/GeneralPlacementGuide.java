@@ -79,7 +79,7 @@ public class GeneralPlacementGuide extends PlacementGuide {
             }
         }
 
-        return validSides.isEmpty() ? Optional.empty() : Optional.of(validSides.getFirst());
+        return validSides.isEmpty() ? Optional.empty() : Optional.of(validSides.get(0));
     }
 
     protected boolean getUseShift(SchematicBlockState state) {
@@ -119,7 +119,6 @@ public class GeneralPlacementGuide extends PlacementGuide {
                     lookDirection.orElse(null), requiresShift);
         } catch (Exception e) {
             Printer.logger.error("getPlacementContext(): Exception caught: {}", e.getMessage());
-            //e.printStackTrace();
             return null;
         }
     }
