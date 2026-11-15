@@ -8,6 +8,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
+import net.minecraft.network.packet.c2s.play.UpdateSelectedSlotC2SPacket;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.Direction;
 
@@ -59,12 +60,15 @@ public class PrepareAction extends Action {
                 this.addPickBlock(inventory, itemStack);
                 client.interactionManager.clickCreativeStack(player.getStackInHand(Hand.MAIN_HAND),
                         36 + inventory.selectedSlot);
+                player.networkHandler.sendPacket(new UpdateSelectedSlotC2SPacket(inventory.selectedSlot));
             } else if (slot != -1) {
                 if (PlayerInventory.isValidHotbarIndex(slot)) {
                     inventory.selectedSlot = slot;
+                    player.networkHandler.sendPacket(new UpdateSelectedSlotC2SPacket(slot));
                 } else {
                     //client.interactionManager.pickFromInventory(slot);
                     InventoryUtils.setPickedItemToHand(slot, itemStack, client);
+                    player.networkHandler.sendPacket(new UpdateSelectedSlotC2SPacket(inventory.selectedSlot));
                 }
             }
         }
@@ -91,7 +95,7 @@ public class PrepareAction extends Action {
     private void addPickBlock(PlayerInventory inv, ItemStack stack) {
         int slot = inv.getSlotWithStack(stack);
 
-        if (slot >= 0 && slot <= 9) {
+        if (PlayerInventory.isValidHotbarIndex(slot)) {
             inv.selectedSlot = slot;
         } else {
             if (slot == -1) {

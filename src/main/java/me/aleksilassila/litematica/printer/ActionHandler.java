@@ -22,8 +22,14 @@ public class ActionHandler {
     }
 
     private int tick = 0;
+    private int prepareCooldown = 0;
 
     public void onGameTick() {
+        if (prepareCooldown > 0) {
+            prepareCooldown--;
+            return;
+        }
+
         int tickRate = Configs.PRINTING_INTERVAL.getIntegerValue();
         tick = tick % tickRate == tickRate - 1 ? 0 : tick + 1;
 
@@ -36,6 +42,10 @@ public class ActionHandler {
         if (nextAction != null) {
             Printer.printDebug("Sending action {}", nextAction);
             nextAction.send(client, player);
+
+            if (nextAction instanceof PrepareAction) {
+                prepareCooldown = 3;
+            }
         } else {
             lookAction = null;
         }
